@@ -1,29 +1,24 @@
-// Update with your config settings.
+import type { Knex } from "knex";
+import dotenv from "dotenv";
 
-/**
- * @type { Object.<string, import("knex").Knex.Config> }
- */
-module.exports = {
-  development: {
-    client: "postgresql",
-    connection: {
-      filename: "./dev.sqlite3",
-    },
+dotenv.config();
+
+const config: Knex.Config = {
+  client: "pg",
+  connection: {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
   },
-
-  staging: {
-    client: "postgresql",
-    connection: {
-      database: "my_db",
-      user: "username",
-      password: "password",
-    },
-    pool: {
-      min: 2,
-      max: 10,
-    },
-    migrations: {
-      tableName: "knex_migrations",
-    },
+  migrations: {
+    directory: "src/migrations",
+    tableName: "knex_migrations",
+    extension: "ts",
+  },
+  seeds: {
+    directory: "./seeds",
   },
 };
+
+export default config;

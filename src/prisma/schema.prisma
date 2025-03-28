@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  Product     Product[]
+}
+
+model Product {
+  id          Int       @id @default(autoincrement())
+  categoryId  Int
+  name        String
+  description String?
+  price       Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+  deletedAt   DateTime?
+
+  category          Category            @relation(fields: [categoryId], references: [id])
+  ProductIngredient ProductIngredient[]
+
+  @@index([categoryId])
+}
+
+model Ingredient {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  isAllergen        Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime?
+  deletedAt         DateTime?
+  ProductIngredient ProductIngredient[]
+
+  @@index([name])
+}
+
+model ProductIngredient {
+  productId    Int
+  ingredientId Int
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime?
+
+  product    Product    @relation(fields: [productId], references: [id])
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@id([productId, ingredientId])
+}

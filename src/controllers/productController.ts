@@ -3,7 +3,12 @@ import productModel from "src/models/productModel";
 
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const products = await productModel.getAllProducts();
+    const { category, showDeleted } = req.query;
+
+    const products = await productModel.getAllProducts(
+      category as string,
+      showDeleted as string
+    );
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });

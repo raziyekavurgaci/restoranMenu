@@ -3,7 +3,10 @@ import categoryModel from "src/models/categoryModel";
 
 export const getAllCategories = async (req: Request, res: Response) => {
   try {
-    const categories = await categoryModel.getAllCategories();
+    const { showDeleted } = req.query;
+    const categories = await categoryModel.getAllCategories(
+      showDeleted as string
+    );
     res.json(categories);
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });

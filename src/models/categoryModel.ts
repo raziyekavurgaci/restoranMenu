@@ -2,8 +2,19 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 class categoryModel {
-  static async getAllCategories() {
-    return await prisma.category.findMany();
+  static async getAllCategories(showDeleted?: string) {
+    let whereCondition = {};
+    if (showDeleted === "false" || showDeleted) {
+      whereCondition = { deletedAt: null };
+    } else if (showDeleted === "onlyDeleted") {
+      whereCondition: {
+        NOT: {
+          deletedAt: null;
+        }
+      }
+    }
+
+    return await prisma.category.findMany({ where: whereCondition });
   }
   static async getCategoryById(id: number) {
     return await prisma.category.findUnique({

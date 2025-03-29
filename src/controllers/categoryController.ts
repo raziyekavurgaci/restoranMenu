@@ -13,9 +13,10 @@ export const getAllCategories = async (req: Request, res: Response) => {
 export const getCategoryById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const categoryById = await categoryModel.getCategoryById(Number(id));
-    return categoryById;
+    const categoryById = await categoryModel.getCategoryById(+id);
+    res.json(categoryById);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Something went wrong" });
   }
 };

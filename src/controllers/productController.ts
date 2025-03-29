@@ -14,7 +14,7 @@ export const getProductById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const productById = await productModel.getProductById(Number(id));
-    return productById;
+    res.json(productById);
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });
   }

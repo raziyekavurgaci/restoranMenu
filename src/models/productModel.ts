@@ -23,9 +23,9 @@ class productModel {
 
   static async updateProduct(
     id: number,
+    categoryId?: number,
     name?: string,
     price?: number,
-    categoryId?: number,
     description?: string
   ) {
     return await prisma.product.update({

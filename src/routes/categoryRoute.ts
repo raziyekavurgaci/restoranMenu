@@ -8,6 +8,7 @@ import {
 } from "src/controllers/categoryController";
 
 const router = Express.Router();
+
 router.get("/", getAllCategories);
 router.get("/:id", getCategoryById);
 router.post("/", createCategory);
